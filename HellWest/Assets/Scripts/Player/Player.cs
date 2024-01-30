@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
         ConfirmingFire,
     }
 
-    private PlayerState _currentState = PlayerState.Character;
+    private PlayerState _currentState = PlayerState.None;
     public PlayerState CurrentState
     {
         get
@@ -32,6 +32,11 @@ public class Player : MonoBehaviour
     public PlayerCharacterController Character;
     public PlayerCamera Camera;
     public PlayerBulletTimer PlayerBT;
+    public PlayerShoot PlayerShoot;
+
+    [Header("Camera")]
+    public Transform PlayerCameraFocusPoint;
+    public float CameraMovementSpeed = 5f;
 
     //private const string MouseXInput = "Mouse X";
     //private const string MouseYInput = "Mouse Y";
@@ -59,11 +64,13 @@ public class Player : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         // Tell camera to follow transform
-        Camera.SetFollowTransform(Character.CameraFollowPoint);
+        Camera.SetFollowTransform(PlayerCameraFocusPoint);
 
         // Ignore the character's collider(s) for camera obstruction checks
         Camera.IgnoredColliders.Clear();
         Camera.IgnoredColliders.AddRange(Character.GetComponentsInChildren<Collider>());
+
+        CurrentState = PlayerState.Character;
     }
 
     private void Update()
@@ -73,7 +80,21 @@ public class Player : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
         }
 
-        HandleCharacterInput();
+
+        if(CurrentState == PlayerState.Character)
+        {
+            HandleCharacterInput();
+        }
+
+        if(CurrentState == PlayerState.ConfirmingFire)
+        {
+            NullCharacterInput();
+
+            Vector3 cameraForward = Camera.Camera.transform.forward;
+            Vector3 cameraRight = Camera.Camera.transform.right;
+            PlayerCameraFocusPoint.position += (cameraForward * _movementInputVector.y * CameraMovementSpeed * Time.unscaledDeltaTime)
+                                            + (cameraRight * _movementInputVector.x * CameraMovementSpeed * Time.unscaledDeltaTime);
+        }
     }
 
     private void LateUpdate()
@@ -88,7 +109,7 @@ public class Player : MonoBehaviour
         HandleCameraInput();
     }
 
-    private void TransitionToState(PlayerState toState)
+    public void TransitionToState(PlayerState toState)
     {
         PlayerState oldState = _currentState;
         switch (oldState)
@@ -100,6 +121,8 @@ public class Player : MonoBehaviour
             case PlayerState.Dead:
                 break;
             case PlayerState.ConfirmingFire:
+                PlayerBT.MoveToTimeScaleBulletTime(PlayerBT.BulletTimeFactor);
+                PlayerShoot.ClearVisualizationLines();
                 break;
             default:
                 break;
@@ -110,10 +133,25 @@ public class Player : MonoBehaviour
             case PlayerState.None:
                 break;
             case PlayerState.Character:
+                PlayerCameraFocusPoint.position = Character.CameraFollowPoint.position;
+                PlayerCameraFocusPoint.parent = Character.CameraFollowPoint;
+
+                Camera.CurrentState = PlayerCamera.CameraState.FPS;
+                //Initialize camera distance values
                 break;
             case PlayerState.Dead:
+                PlayerCameraFocusPoint.position = Character.CameraFollowPoint.position;
+                PlayerCameraFocusPoint.parent = Character.CameraFollowPoint;
+
+                Camera.CurrentState = PlayerCamera.CameraState.FPS;
+                PlayerBT.StopBulletTime();
                 break;
             case PlayerState.ConfirmingFire:
+                PlayerBT.MoveToTimeScaleBulletTime(PlayerBT.MegaBulletTime);
+                PlayerCameraFocusPoint.parent = null;
+
+                Camera.CurrentState = PlayerCamera.CameraState.Detached;
+                //Initialize camera distance values
                 break;
             default:
                 break;
@@ -132,15 +170,20 @@ public class Player : MonoBehaviour
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && CurrentState == PlayerState.Character)
         {
-            Debug.Log("Fire!");
+            PlayerShoot.VisualizeProjectileTrajectory();
+        }
+        else if (context.started && CurrentState == PlayerState.ConfirmingFire)
+        {
+            //Set new trajectory point;
+            PlayerShoot.SetNewTrajectoryPoint();
         }
     }
 
     public void OnBulletTime(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && CurrentState == PlayerState.Character)
         {
             PlayerBT.ToggleBulletTime();
         }
@@ -148,30 +191,30 @@ public class Player : MonoBehaviour
 
     public void OnStopTime(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && CurrentState == PlayerState.Character)
         {
             Debug.Log("Stop time!");
         }        
     }
     public void OnShadow(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && CurrentState == PlayerState.Character)
         {
             Debug.Log("Shadow!");
         }
     }
     public void OnConfirmFire(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && CurrentState == PlayerState.ConfirmingFire)
         {
             Debug.Log("Confirm fire!");
         }
     }
     public void OnReturnFire(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && CurrentState == PlayerState.ConfirmingFire)
         {
-            Debug.Log("Return fire!");
+            PlayerShoot.ReturnFire();
         }
     }
 
@@ -213,6 +256,19 @@ public class Player : MonoBehaviour
         //characterInputs.JumpDown = Input.GetKeyDown(KeyCode.Space);
         //characterInputs.CrouchDown = Input.GetKeyDown(KeyCode.C);
         //characterInputs.CrouchUp = Input.GetKeyUp(KeyCode.C);
+
+        // Apply inputs to character
+        Character.SetInputs(ref characterInputs);
+    }
+
+    private void NullCharacterInput()
+    {
+        PlayerCharacterInputs characterInputs = new PlayerCharacterInputs();
+
+        // Build the CharacterInputs struct
+        characterInputs.MoveAxisForward = 0f;
+        characterInputs.MoveAxisRight = 0f;
+        characterInputs.CameraRotation = Character.transform.rotation;
 
         // Apply inputs to character
         Character.SetInputs(ref characterInputs);

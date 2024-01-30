@@ -6,9 +6,11 @@ using UnityEngine;
 public class PlayerBulletTimer : MonoBehaviour
 {
     public float BulletTimeFactor = .1f;
-    public float BulletTimeTransition = .5f;
+    public float MegaBulletTime = .01f;
+    public float BulletTimeTransition = .33f;
     private float _bulletTimeTransitionTimer = float.MinValue;
     public bool IsInBulletTime = false;
+    private float _toTimeScale = 0f;
 
     public void ToggleBulletTime()
     {
@@ -18,7 +20,7 @@ public class PlayerBulletTimer : MonoBehaviour
         }
         else
         {
-            StartBulletTime();
+            MoveToTimeScaleBulletTime(BulletTimeFactor);
         }
     }
 
@@ -34,7 +36,7 @@ public class PlayerBulletTimer : MonoBehaviour
             if(Time.timeScale != BulletTimeFactor && _bulletTimeTransitionTimer > 0)
             {
                 _bulletTimeTransitionTimer -= Time.unscaledDeltaTime;
-                float lerpdTimeScale = Mathf.Lerp(1f, BulletTimeFactor, 1-(_bulletTimeTransitionTimer / BulletTimeTransition));
+                float lerpdTimeScale = Mathf.Lerp(1f, _toTimeScale, 1-(_bulletTimeTransitionTimer / BulletTimeTransition));
                 Time.timeScale = lerpdTimeScale;
             }
             else
@@ -47,7 +49,7 @@ public class PlayerBulletTimer : MonoBehaviour
             if (Time.timeScale != 1f && _bulletTimeTransitionTimer > 0)
             {
                 _bulletTimeTransitionTimer -= Time.unscaledDeltaTime;
-                float lerpdTimeScale = Mathf.Lerp(BulletTimeFactor, 1f, 1 - (_bulletTimeTransitionTimer / BulletTimeTransition));
+                float lerpdTimeScale = Mathf.Lerp(_toTimeScale, 1f, 1 - (_bulletTimeTransitionTimer / BulletTimeTransition));
                 Time.timeScale = lerpdTimeScale;
             }
             else
@@ -59,14 +61,14 @@ public class PlayerBulletTimer : MonoBehaviour
 
     }
 
-    private void StartBulletTime()
+    public void MoveToTimeScaleBulletTime(float toTimeScale)
     {
         IsInBulletTime = true;
         _bulletTimeTransitionTimer = BulletTimeTransition;
-        Debug.Log("Bullet time!");
+        _toTimeScale = BulletTimeFactor;
     }
 
-    private void StopBulletTime()
+    public void StopBulletTime()
     {
         IsInBulletTime = false;
         _bulletTimeTransitionTimer = BulletTimeTransition;
