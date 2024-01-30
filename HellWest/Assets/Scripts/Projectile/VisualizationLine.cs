@@ -20,4 +20,16 @@ public class VisualizationLine : MonoBehaviour
     {
         Line.SetPosition(index, to);
     }
+
+    public Color HandleColor(bool canShoot)
+    {
+        if (canShoot)
+        {
+            return Color.white;
+        }
+        else
+        {
+            return Color.red;
+        }
+    }
 }

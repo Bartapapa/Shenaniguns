@@ -6,6 +6,47 @@ using UnityEngine;
 
 public class PlayerShoot : MonoBehaviour
 {
+    public struct ProjectileHitData
+    {
+        public ShootingMaterial HitMaterial;
+        public Vector3 ProjectileDirection;
+        public Vector3 HitNormal;
+        public float ProjectilePenetrationStrength;
+
+        public ProjectileHitData(ShootingMaterial hitMaterial, Vector3 projectileDirection, Vector3 hitNormal, float projectilePenetrationStrength)
+        {
+            HitMaterial = hitMaterial;
+            ProjectileDirection = projectileDirection;
+            HitNormal = hitNormal;
+            ProjectilePenetrationStrength = projectilePenetrationStrength;
+        }
+
+        public bool CanReflect()
+        {
+            if (HitMaterial)
+            {
+                if (Vector3.Dot(ProjectileDirection, HitNormal) >= HitMaterial.Stats.MinMaxDotProductReflection.x &&
+                    Vector3.Dot(ProjectileDirection, HitNormal) >= HitMaterial.Stats.MinMaxDotProductReflection.y)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool CanPenetrate()
+        {
+            if (!CanReflect())
+            {
+                if (ProjectilePenetrationStrength >= HitMaterial.Stats.MaterialResistance)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
     [Header("Object refs")]
     public Projectile PlayerBullet;
     public VisualizationLine VisualizationLine;
@@ -23,6 +64,8 @@ public class PlayerShoot : MonoBehaviour
     private RaycastHit _hit;
     private RaycastHit _screenHit;
     private bool _hasReachedMaxNumberOfRicochets = false;
+    private float _visualizedPenetrationStrength = 100f;
+    private ProjectileHitData _currentHitData;
 
     private void Update()
     {
@@ -76,6 +119,7 @@ public class PlayerShoot : MonoBehaviour
 
     public void VisualizeProjectileTrajectory()
     {
+        _visualizedPenetrationStrength = PenetrationStrength;
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(.5f, .5f, 0f));
         RaycastHit rayHit;
         Vector3 endPoint = Vector3.zero;
@@ -89,7 +133,8 @@ public class PlayerShoot : MonoBehaviour
         }
 
         Vector3 direction =  endPoint - ShootPoint.position; 
-        if (Physics.Raycast(ShootPoint.position, direction, out _hit, 500f))
+
+        if (RaycastBullet(ShootPoint.position, direction, out _currentHitData, 500f))
         {
             Player.Instance.TransitionToState(Player.PlayerState.ConfirmingFire);
             CreateVisualizationLine(ShootPoint.position, _hit.point);
@@ -97,6 +142,21 @@ public class PlayerShoot : MonoBehaviour
             _hasReachedMaxNumberOfRicochets = false;
             CreateVisualizationLine(_hit.point, endPoint, out _currentVisualizationLine);
         }
+    }
+
+    private bool RaycastBullet(Vector3 origin, Vector3 direction, out ProjectileHitData hitData, float maxDistance)
+    {
+        hitData = new ProjectileHitData();
+        if (Physics.Raycast(origin, direction, out _hit, maxDistance))
+        {
+            ShootingMaterial shotMat = _hit.collider.GetComponent<ShootingMaterial>();
+            if (shotMat)
+            {
+                hitData = new ProjectileHitData(shotMat, direction, _hit.normal, _visualizedPenetrationStrength);
+                return true;
+            }
+        }
+        return false;
     }
 
     public void CreateVisualizationLine(Vector3 from, Vector3 to)
