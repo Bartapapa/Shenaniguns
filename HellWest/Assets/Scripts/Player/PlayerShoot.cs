@@ -22,6 +22,7 @@ public class PlayerShoot : MonoBehaviour
     private bool _canShoot = true;
     private RaycastHit _hit;
     private RaycastHit _screenHit;
+    private bool _hasReachedMaxNumberOfRicochets = false;
 
     private void Update()
     {
@@ -29,7 +30,7 @@ public class PlayerShoot : MonoBehaviour
 
         if(Player.Instance.CurrentState == Player.PlayerState.ConfirmingFire)
         {
-            if (_currentVisualizationLine != null)
+            if (_currentVisualizationLine != null && !_hasReachedMaxNumberOfRicochets)
             {
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(.5f, .5f, 0f));
                 Vector3 endPoint = Vector3.zero;
@@ -93,6 +94,7 @@ public class PlayerShoot : MonoBehaviour
             Player.Instance.TransitionToState(Player.PlayerState.ConfirmingFire);
             CreateVisualizationLine(ShootPoint.position, _hit.point);
             _currentNumberOfRicochets++;
+            _hasReachedMaxNumberOfRicochets = false;
             CreateVisualizationLine(_hit.point, endPoint, out _currentVisualizationLine);
         }
     }
@@ -132,24 +134,40 @@ public class PlayerShoot : MonoBehaviour
 
     public void ReturnFire()
     {
-        RemoveVisualizationLine(_currentNumberOfRicochets);
-        _currentNumberOfRicochets--;
-        if (_currentNumberOfRicochets <= 0)
+        if (_hasReachedMaxNumberOfRicochets)
         {
-            Player.Instance.TransitionToState(Player.PlayerState.Character);
-            _currentNumberOfRicochets = 0;
+            _hasReachedMaxNumberOfRicochets = false;
         }
         else
         {
-            _currentVisualizationLine = _shootingLines[_currentNumberOfRicochets];
+            RemoveVisualizationLine(_currentNumberOfRicochets);
+            _currentNumberOfRicochets--;
+            _hasReachedMaxNumberOfRicochets = false;
+            if (_currentNumberOfRicochets <= 0)
+            {
+                Player.Instance.TransitionToState(Player.PlayerState.Character);
+                _currentNumberOfRicochets = 0;
+            }
+            else
+            {
+                _currentVisualizationLine = _shootingLines[_currentNumberOfRicochets];
+            }
         }
     }
 
     public void SetNewTrajectoryPoint()
     {
-        //Check if can set
-        int currentIndex = _currentNumberOfRicochets;
-        CreateVisualizationLine(_shootingLines[currentIndex].DestinationPoint(), _screenHit.point, out _currentVisualizationLine);
-        _currentNumberOfRicochets++;
+        if (_currentNumberOfRicochets < MaxNumberOfRicochets)
+        {
+            int currentIndex = _currentNumberOfRicochets;
+            CreateVisualizationLine(_shootingLines[currentIndex].DestinationPoint(), _screenHit.point, out _currentVisualizationLine);
+            _currentNumberOfRicochets++;
+            _hasReachedMaxNumberOfRicochets = false;
+        }
+        else
+        {
+            //_currentVisualizationLine = null;
+            _hasReachedMaxNumberOfRicochets = true;
+        }
     }
 }
