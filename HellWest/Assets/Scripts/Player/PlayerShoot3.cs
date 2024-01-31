@@ -93,10 +93,11 @@ public class PlayerShoot3 : MonoBehaviour
 
     public void Shoot()
     {
-        if (!_canShoot) return;
+        if (!_canShoot || Player.Instance.CurrentBullets <= 0) return;
 
         _canShoot = false;
         _shootCooldownTimer = ShootCooldown;
+        Player.Instance.CurrentBullets--;
 
         Projectile newBullet = Instantiate<Projectile>(PlayerBullet, DetachedShootPoint.position, DetachedShootPoint.rotation);
         newBullet.InitializeProjectile(DetachedShootPoint.forward, PenetrationStrength);
@@ -227,10 +228,11 @@ public class PlayerShoot3 : MonoBehaviour
 
     public void ConfirmFire(List<Vector3> wayPoints)
     {
-        if (!_canShoot) return;
+        if (!_canShoot || Player.Instance.CurrentBullets <= 0) return;
 
         _canShoot = false;
         _shootCooldownTimer = ShootCooldown;
+        Player.Instance.CurrentBullets--;
 
         Projectile newBullet = Instantiate<Projectile>(PlayerBullet, DetachedShootPoint.position, DetachedShootPoint.rotation);
         newBullet.InitializeProjectile(DetachedShootPoint.forward, PenetrationStrength);

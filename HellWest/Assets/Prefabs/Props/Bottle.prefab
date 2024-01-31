@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Projectile: {fileID: 4517930383422880293, guid: 2f3c4cc9df4276a4b8d9ce110b7988df, type: 3}
-  ProjectileNumber: 5
+  ProjectileNumber: 10
   DestructibleCenterOfMass: {fileID: 4371562709657497116}
   ProjectileSphereRadius: 0.15
 --- !u!65 &3465995284836321441

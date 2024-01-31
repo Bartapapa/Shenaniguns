@@ -48,22 +48,22 @@ public class ShootingMaterial : MonoBehaviour
             case MaterialType.None:
                 break;
             case MaterialType.ThinWood:
-                Stats = new MaterialStats(10f, new Vector2(.3f, .7f));
+                Stats = new MaterialStats(10f, new Vector2(.3f, .8f));
                 break;
             case MaterialType.ThickWood:
-                Stats = new MaterialStats(45f, new Vector2(.3f, .7f));
+                Stats = new MaterialStats(45f, new Vector2(.3f, .8f));
                 break;
             case MaterialType.ThinBone:
-                Stats = new MaterialStats(10f, new Vector2(.3f, .7f));
+                Stats = new MaterialStats(10f, new Vector2(.3f, .8f));
                 break;
             case MaterialType.ThickBone:
-                Stats = new MaterialStats(45f, new Vector2(.3f, .7f));
+                Stats = new MaterialStats(45f, new Vector2(.3f, .8f));
                 break;
             case MaterialType.ThinMetal:
-                Stats = new MaterialStats(30f, new Vector2(.15f, .7f));
+                Stats = new MaterialStats(30f, new Vector2(.15f, .95f));
                 break;
             case MaterialType.ThickMetal:
-                Stats = new MaterialStats(70f, new Vector2(.15f, .7f));
+                Stats = new MaterialStats(70f, new Vector2(.15f, .95f));
                 break;
             case MaterialType.Glass:
                 Stats = new MaterialStats(0f, new Vector2(0, 0));
@@ -78,7 +78,7 @@ public class ShootingMaterial : MonoBehaviour
                 Stats = new MaterialStats(CustomStatResistance, CustomStatReflection);
                 break;
             default:
-                Stats = new MaterialStats(10f, new Vector2(.3f, .75f));
+                Stats = new MaterialStats(10f, new Vector2(.3f, .8f));
                 break;
         }
     }

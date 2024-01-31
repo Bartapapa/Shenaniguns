@@ -47,6 +47,10 @@ public class Player : MonoBehaviour
     private Vector2 _movementInputVector = Vector2.zero;
     private Vector2 _lookInputVector = Vector2.zero;
 
+    [Header("Bullets")]
+    public int MaxBullets = 6;
+    public int CurrentBullets = 6;
+
     private void Awake()
     {
         if (Instance == null)
@@ -291,5 +295,14 @@ public class Player : MonoBehaviour
 
         // Apply inputs to character
         Character.SetInputs(ref characterInputs);
+    }
+
+    public void AcquireBullets(int bullets)
+    {
+        CurrentBullets += bullets;
+        if (CurrentBullets > MaxBullets)
+        {
+            CurrentBullets = MaxBullets;
+        }
     }
 }
