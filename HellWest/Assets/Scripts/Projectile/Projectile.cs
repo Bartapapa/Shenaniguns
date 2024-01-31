@@ -37,7 +37,7 @@ public class Projectile : MonoBehaviour
 
             _targetVelocity = direction * ProjectileSpeed;
 
-            if (Vector3.Distance(transform.position, WayPoints[_currentWaypoint]) <= .1f || passed)
+            if (Vector3.Distance(transform.position, WayPoints[_currentWaypoint]) <= .05f || passed)
             {
                 _currentWaypoint++;
                 ParticleSystem newkapwing = Instantiate<ParticleSystem>(KAPWING, transform.position, Quaternion.identity);
