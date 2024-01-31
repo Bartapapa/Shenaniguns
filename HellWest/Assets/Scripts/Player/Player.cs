@@ -137,6 +137,11 @@ public class Player : MonoBehaviour
                 PlayerCameraFocusPoint.parent = Character.CameraFollowPoint;
 
                 Camera.CurrentState = PlayerCamera.CameraState.FPS;
+                Camera.DefaultDistance = 0f;
+                Camera.MinDistance = 0f;
+                Camera.MaxDistance = 0f;
+                Camera.DistanceMovementSpeed = 5f;
+                Camera.DistanceMovementSharpness = 10f;
                 //Initialize camera distance values
                 break;
             case PlayerState.Dead:
@@ -151,6 +156,11 @@ public class Player : MonoBehaviour
                 PlayerCameraFocusPoint.parent = null;
 
                 Camera.CurrentState = PlayerCamera.CameraState.Detached;
+                Camera.DefaultDistance = 5f;
+                Camera.MinDistance = 0f;
+                Camera.MaxDistance = 10f;
+                Camera.DistanceMovementSpeed = 5f;
+                Camera.DistanceMovementSharpness = 10f;
                 //Initialize camera distance values
                 break;
             default:
@@ -207,7 +217,16 @@ public class Player : MonoBehaviour
     {
         if (context.started && CurrentState == PlayerState.ConfirmingFire)
         {
-            Debug.Log("Confirm fire!");
+            List<Vector3> wayPoints = new List<Vector3>();
+            for (int i = 0; i < PlayerShoot.ShootingLines.Count; i++)
+            {
+                if (PlayerShoot.ShootingLines[i].IsLocked)
+                {
+                    Vector3 newWayPoint = PlayerShoot.ShootingLines[i].DestinationPoint();
+                    wayPoints.Add(newWayPoint);
+                }
+            }
+            PlayerShoot.ConfirmFire(wayPoints);
         }
     }
     public void OnReturnFire(InputAction.CallbackContext context)

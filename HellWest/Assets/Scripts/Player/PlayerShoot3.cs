@@ -9,7 +9,7 @@ public class PlayerShoot3 : MonoBehaviour
     public Projectile PlayerBullet;
     public VisualizationLine VisualizationLine;
     private VisualizationLine _currentVisualizationLine;
-    private List<VisualizationLine> _shootingLines = new List<VisualizationLine>();
+    [HideInInspector] public List<VisualizationLine> ShootingLines = new List<VisualizationLine>();
 
     [Header("Shoot")]
     public Transform RayCastOrigin;
@@ -18,6 +18,7 @@ public class PlayerShoot3 : MonoBehaviour
     public int MaxNumberOfRicochets = 3;
     private int _currentNumberOfRicochets = 0;
     public Transform ShootPoint;
+    public Transform DetachedShootPoint;
     public float ShootCooldown = .25f;
     private float _shootCooldownTimer = float.MinValue;
     private bool _canShoot = true;
@@ -25,7 +26,7 @@ public class PlayerShoot3 : MonoBehaviour
     private RaycastHit _screenHit;
     private bool _hasReachedMaxNumberOfRicochets = false;
     private float _visualizedPenetrationStrength = 100f;
-    private ProjectileHitData _currentHitData;
+    private ProjectileHitData _cachedHitData;
     private bool _canCreateVisualizationLine = false;
     private List<ProjectileHitData> _hitData = new List<ProjectileHitData>();
 
@@ -48,15 +49,15 @@ public class PlayerShoot3 : MonoBehaviour
                     endPoint = ray.origin + (ray.direction * 500f);
                 }
 
-                Vector3 direction = endPoint - _shootingLines[_currentNumberOfRicochets - 1].DestinationPoint();
+                Vector3 direction = endPoint - ShootingLines[_currentNumberOfRicochets - 1].DestinationPoint();
 
-                if (Physics.Raycast(_shootingLines[_currentNumberOfRicochets-1].DestinationPoint(), direction, out _hit, 500f, ShootingMask))
+                if (Physics.Raycast(ShootingLines[_currentNumberOfRicochets-1].DestinationPoint(), direction, out _hit, 500f, ShootingMask))
                 {
                     ShootingMaterial shotMat = _hit.collider.GetComponent<ShootingMaterial>();
                     if (shotMat)
                     {
                         _currentVisualizationLine.SetPosition(1, endPoint);
-                        _currentVisualizationLine.HitData = new ProjectileHitData(shotMat, direction, _hit.normal, _hit.point);
+                        _cachedHitData = new ProjectileHitData(shotMat, direction, _hit.normal, _hit.point);
                     }
                 }
 
@@ -117,6 +118,7 @@ public class PlayerShoot3 : MonoBehaviour
                 CreateVisualizationLine(ShootPoint.position, _hit.point, out _currentVisualizationLine);
                 _currentNumberOfRicochets++;
                 _hasReachedMaxNumberOfRicochets = false;
+                _currentVisualizationLine.IsLocked = true;
                 CreateVisualizationLine(_hit.point, endPoint, out _currentVisualizationLine);
                 _currentVisualizationLine.HitData = new ProjectileHitData(shotMat, direction, _hit.normal, _hit.point);
             }
@@ -134,26 +136,25 @@ public class PlayerShoot3 : MonoBehaviour
     public void CreateVisualizationLine(Vector3 from, Vector3 to, out VisualizationLine createdLine)
     {
         createdLine = Instantiate<VisualizationLine>(VisualizationLine, from, Quaternion.identity);
-        createdLine.HitData = _currentHitData;
         createdLine.SetPosition(0, from);
         createdLine.SetPosition(1, to);
 
-        _shootingLines.Add(createdLine);
+        ShootingLines.Add(createdLine);
     }
 
     public void RemoveVisualizationLine(int index)
     {
-        Destroy(_shootingLines[index].gameObject);
-        _shootingLines.RemoveAt(index);
+        Destroy(ShootingLines[index].gameObject);
+        ShootingLines.RemoveAt(index);
     }
 
     public void ClearVisualizationLines()
     {
-        foreach (VisualizationLine line in _shootingLines)
+        foreach (VisualizationLine line in ShootingLines)
         {
             Destroy(line.gameObject);
         }
-        _shootingLines.Clear();
+        ShootingLines.Clear();
     }
 
     public void ReturnFire()
@@ -161,6 +162,7 @@ public class PlayerShoot3 : MonoBehaviour
         if (_hasReachedMaxNumberOfRicochets)
         {
             _hasReachedMaxNumberOfRicochets = false;
+            _currentVisualizationLine.IsLocked = false;
         }
         else
         {
@@ -175,34 +177,47 @@ public class PlayerShoot3 : MonoBehaviour
             }
             else
             {
-                _currentVisualizationLine = _shootingLines[_currentNumberOfRicochets];
+                _currentVisualizationLine = ShootingLines[_currentNumberOfRicochets];
+                _currentVisualizationLine.IsLocked = false;
             }
         }
     }
 
     public void SetNewTrajectoryPoint()
     {
+        if (!_currentVisualizationLine.CanConfirmShot()) return;
+
         if (_currentNumberOfRicochets < MaxNumberOfRicochets)
         {
+            //_currentVisualizationLine.HitData = _cachedHitData;
+            _currentVisualizationLine.IsLocked = true;
+
             int currentIndex = _currentNumberOfRicochets;
-            CreateVisualizationLine(_shootingLines[currentIndex].DestinationPoint(), _screenHit.point, out _currentVisualizationLine);
+            CreateVisualizationLine(ShootingLines[currentIndex].DestinationPoint(), _screenHit.point, out _currentVisualizationLine);
+            _currentVisualizationLine.HitData = _cachedHitData;
             _currentNumberOfRicochets++;
             _hasReachedMaxNumberOfRicochets = false;
         }
         else
         {
+            _currentVisualizationLine.IsLocked = true;
             _hasReachedMaxNumberOfRicochets = true;
         }
     }
 
     public void ConfirmFire(List<Vector3> wayPoints)
     {
-        if (!_canShoot || !_currentVisualizationLine.CanConfirmShot()) return;
+        if (!_canShoot) return;
 
         _canShoot = false;
         _shootCooldownTimer = ShootCooldown;
 
-        Projectile newBullet = Instantiate<Projectile>(PlayerBullet, ShootPoint.position, ShootPoint.rotation);
-        newBullet.InitializeProjectile(ShootPoint.forward, PenetrationStrength);
+        Projectile newBullet = Instantiate<Projectile>(PlayerBullet, DetachedShootPoint.position, DetachedShootPoint.rotation);
+        newBullet.InitializeProjectile(DetachedShootPoint.forward, PenetrationStrength);
+        newBullet.WayPoints = wayPoints;
+
+        Player.Instance.TransitionToState(Player.PlayerState.Character);
+        ClearVisualizationLines();
+        _currentNumberOfRicochets = 0;
     }
 }

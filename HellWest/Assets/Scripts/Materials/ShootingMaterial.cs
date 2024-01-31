@@ -37,6 +37,10 @@ public class ShootingMaterial : MonoBehaviour
     public float CustomStatResistance = 0f;
     public Vector2 CustomStatReflection = new Vector2(0, 1);
 
+    private void Awake()
+    {
+        InitializeStats(Type);
+    }
     private void InitializeStats(MaterialType type)
     {
         switch (type)

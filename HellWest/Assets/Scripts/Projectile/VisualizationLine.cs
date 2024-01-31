@@ -6,6 +6,7 @@ public class VisualizationLine : MonoBehaviour
 {
     public LineRenderer Line;
     public ProjectileHitData HitData;
+    public bool IsLocked = false;
 
     public VisualizationLine(ProjectileHitData hitData)
     {
@@ -35,6 +36,8 @@ public class VisualizationLine : MonoBehaviour
 
     public Color HandleColor(bool canShoot)
     {
+        if (IsLocked) return Color.yellow;
+
         if (canShoot)
         {
             return Color.white;
@@ -53,7 +56,9 @@ public class VisualizationLine : MonoBehaviour
         }
         else
         {
-            return HitData.CanRicochet;
+            Vector3 toDirection = OriginPoint() - DestinationPoint();
+            toDirection = toDirection.normalized;
+            return HitData.CanRicochet(toDirection);
         }
     }
 }
