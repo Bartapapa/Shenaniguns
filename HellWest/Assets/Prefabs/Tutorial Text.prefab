@@ -26,7 +26,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2413758386376359014}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 2.68}
   m_LocalScale: {x: 0.05, y: 0.05, z: 1}
   m_ConstrainProportionsScale: 0
@@ -176,13 +176,16 @@ MonoBehaviour:
 
     Left mouse click/Right shoulder to shoot.
 
-    Left
-    control/North button for bullet time.
+    [[[When
+    doing ricochets, Middle mouse button/West button to confirm, and Right mouse
+    button/East button to return.]]]
+
+    Left control/North button for bullet time.
 
 
-    You''ve only got 6 shots - but there
-    are more than 6 demons. Ricochet your bullets off of wood and metal to make two
-    birds with one stone.'
+    You''ve
+    only got 6 shots - but there are more than 6 demons. Ricochet your bullets off
+    of wood and metal to make two birds with one stone.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
