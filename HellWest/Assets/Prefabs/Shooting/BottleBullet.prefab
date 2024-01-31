@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.2}
+  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5247320735258855900}
@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8793cdc5cc9ef5340bbd175b359c295c, type: 2}
+  - {fileID: 2100000, guid: 90121fec17d69344e9d4f231b78eb7bb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 3247800742698994244}
   - component: {fileID: 2916879887197994730}
   m_Layer: 0
-  m_Name: PlayerBullet
+  m_Name: BottleBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -112,7 +112,7 @@ Transform:
   m_GameObject: {fileID: 4046550120024740526}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1.849}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -131,8 +131,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 697ed7cef2b467e42b73239cb6444e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PhysicsBasedProjectile: 0
-  ProjectileSpeed: 100
+  PhysicsBasedProjectile: 1
+  ProjectileSpeed: 10
   ProjectileDirection: {x: 0, y: 0, z: 0}
   PenetrationStrength: 100
   WayPoints: []
@@ -146,7 +146,7 @@ Rigidbody:
   m_GameObject: {fileID: 4046550120024740526}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 1
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -159,7 +159,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
@@ -183,8 +183,8 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.1
-  m_Height: 0.3
+  m_Radius: 0.05
+  m_Height: 0.05
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!96 &2916879887197994730
@@ -251,7 +251,7 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
+      key0: {r: 0, g: 0.6603774, b: 0.03972589, a: 1}
       key1: {r: 1, g: 1, b: 1, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -276,7 +276,7 @@ TrailRenderer:
       atime6: 0
       atime7: 0
       m_Mode: 0
-      m_ColorSpace: -1
+      m_ColorSpace: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0

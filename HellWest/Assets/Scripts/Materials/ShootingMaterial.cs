@@ -48,16 +48,16 @@ public class ShootingMaterial : MonoBehaviour
             case MaterialType.None:
                 break;
             case MaterialType.ThinWood:
-                Stats = new MaterialStats(10f, new Vector2(.3f, .3f));
+                Stats = new MaterialStats(10f, new Vector2(.3f, .7f));
                 break;
             case MaterialType.ThickWood:
-                Stats = new MaterialStats(45f, new Vector2(.3f, .3f));
+                Stats = new MaterialStats(45f, new Vector2(.3f, .7f));
                 break;
             case MaterialType.ThinBone:
-                Stats = new MaterialStats(10f, new Vector2(.3f, .5f));
+                Stats = new MaterialStats(10f, new Vector2(.3f, .7f));
                 break;
             case MaterialType.ThickBone:
-                Stats = new MaterialStats(45f, new Vector2(.3f, .5f));
+                Stats = new MaterialStats(45f, new Vector2(.3f, .7f));
                 break;
             case MaterialType.ThinMetal:
                 Stats = new MaterialStats(30f, new Vector2(.15f, .7f));

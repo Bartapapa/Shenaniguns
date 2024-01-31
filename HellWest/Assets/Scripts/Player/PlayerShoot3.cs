@@ -40,13 +40,23 @@ public class PlayerShoot3 : MonoBehaviour
             {
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(.5f, .5f, 0f));
                 Vector3 endPoint = Vector3.zero;
-                if (Physics.Raycast(ray, out _screenHit))
+                if (Physics.Raycast(ray, out _screenHit, 500f, ShootingMask))
                 {
                     endPoint = _screenHit.point;
+                    ShootPoint.LookAt(endPoint);
+                    DetachedShootPoint.LookAt(endPoint);
+                }
+                else if (Physics.Raycast(ray, out _screenHit, 500f))
+                {
+                    endPoint = _screenHit.point;
+                    ShootPoint.LookAt(endPoint);
+                    DetachedShootPoint.LookAt(endPoint);
                 }
                 else
                 {
                     endPoint = ray.origin + (ray.direction * 500f);
+                    ShootPoint.LookAt(endPoint);
+                    DetachedShootPoint.LookAt(endPoint);
                 }
 
                 Vector3 direction = endPoint - ShootingLines[_currentNumberOfRicochets - 1].DestinationPoint();
@@ -98,13 +108,23 @@ public class PlayerShoot3 : MonoBehaviour
 
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(.5f, .5f, 0f));
         Vector3 endPoint = Vector3.zero;
-        if (Physics.Raycast(ray, out _screenHit))
+        if (Physics.Raycast(ray, out _screenHit, 500f, ShootingMask))
         {
             endPoint = _screenHit.point;
+            ShootPoint.LookAt(endPoint);
+            DetachedShootPoint.LookAt(endPoint);
+        }
+        else if (Physics.Raycast(ray, out _screenHit, 500f))
+        {
+            endPoint = _screenHit.point;
+            ShootPoint.LookAt(endPoint);
+            DetachedShootPoint.LookAt(endPoint);
         }
         else
         {
             endPoint = ray.origin + (ray.direction * 500f);
+            ShootPoint.LookAt(endPoint);
+            DetachedShootPoint.LookAt(endPoint);
         }
 
         Vector3 direction = endPoint - RayCastOrigin.position;
@@ -115,7 +135,7 @@ public class PlayerShoot3 : MonoBehaviour
             if (shotMat)
             {
                 Player.Instance.TransitionToState(Player.PlayerState.ConfirmingFire);
-                CreateVisualizationLine(ShootPoint.position, _hit.point, out _currentVisualizationLine);
+                CreateVisualizationLine(DetachedShootPoint.position, _hit.point, out _currentVisualizationLine);
                 _currentNumberOfRicochets++;
                 _hasReachedMaxNumberOfRicochets = false;
                 _currentVisualizationLine.IsLocked = true;
