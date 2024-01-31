@@ -16,6 +16,7 @@ public class Projectile : MonoBehaviour
     private Vector3 _targetVelocity;
     public ParticleSystem KAPWING;
     public GameObject Mesh;
+    public bool _isDead = false;
 
     private void Awake()
     {
@@ -29,7 +30,7 @@ public class Projectile : MonoBehaviour
 
     private void Update()
     {
-        if (WayPoints.Count > 0)
+        if (WayPoints.Count > 0 && !_isDead)
         {
             Vector3 direction = WayPoints[_currentWaypoint] - transform.position;
             direction = direction.normalized;
@@ -45,6 +46,7 @@ public class Projectile : MonoBehaviour
 
                 if (_currentWaypoint > WayPoints.Count - 1)
                 {
+                    _isDead = true;
                     Mesh.SetActive(false);
                     Invoke("DestroyMe", .3f);                
                     //end of line
@@ -96,6 +98,8 @@ public class Projectile : MonoBehaviour
         {
             if (mat.Type == ShootingMaterial.MaterialType.BulletProof)
             {
+                Mesh.SetActive(false);
+                Invoke("DestroyMe", .3f);
                 Destroy(this.gameObject);
             }
         }
