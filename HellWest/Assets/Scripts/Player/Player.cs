@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
     public PlayerCharacterController Character;
     public PlayerCamera Camera;
     public PlayerBulletTimer PlayerBT;
-    public PlayerShoot PlayerShoot;
+    public PlayerShoot3 PlayerShoot;
 
     [Header("Camera")]
     public Transform PlayerCameraFocusPoint;
@@ -122,7 +122,7 @@ public class Player : MonoBehaviour
                 break;
             case PlayerState.ConfirmingFire:
                 PlayerBT.MoveToTimeScaleBulletTime(PlayerBT.BulletTimeFactor);
-                PlayerShoot.ClearVisualizationLines();
+                //PlayerShoot.ClearVisualizationLines();
                 break;
             default:
                 break;
