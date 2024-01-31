@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 3.38, y: 3.93}
+  m_AnchoredPosition: {x: 3.380005, y: 3.9300003}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &691590050495819301
@@ -84,7 +84,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &8523073300998708392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,7 +177,7 @@ MonoBehaviour:
     Left mouse click/Right shoulder to shoot.
 
     [[[When
-    doing ricochets, Middle mouse button/West button to confirm, and Right mouse
+    doing ricochets, Right mouse button/West button to confirm, and Middle mouse
     button/East button to return.]]]
 
     Left control/North button for bullet time.
