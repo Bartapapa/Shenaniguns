@@ -15,6 +15,7 @@ public class Projectile : MonoBehaviour
     private int _currentWaypoint = 0;
     private Vector3 _targetVelocity;
     public ParticleSystem KAPWING;
+    public GameObject Mesh;
 
     private void Awake()
     {
@@ -44,11 +45,17 @@ public class Projectile : MonoBehaviour
 
                 if (_currentWaypoint > WayPoints.Count - 1)
                 {
-                    Destroy(this.gameObject);
+                    Mesh.SetActive(false);
+                    Invoke("DestroyMe", .3f);                
                     //end of line
                 }
             }
         }
+    }
+
+    private void DestroyMe()
+    {
+        Destroy(this.gameObject);
     }
 
     private void FixedUpdate()

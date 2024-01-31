@@ -137,6 +137,7 @@ MonoBehaviour:
   PenetrationStrength: 100
   WayPoints: []
   KAPWING: {fileID: 1640729078362962264, guid: a05c83d2ac1c4464fabd292e6107fda0, type: 3}
+  Mesh: {fileID: 6263319007583351758}
 --- !u!54 &2554279319438651319
 Rigidbody:
   m_ObjectHideFlags: 0
