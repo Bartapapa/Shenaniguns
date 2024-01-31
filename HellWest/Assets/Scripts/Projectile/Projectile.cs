@@ -12,8 +12,9 @@ public class Projectile : MonoBehaviour
     public float PenetrationStrength = 100f;
     private Rigidbody _rb;
     public List<Vector3> WayPoints = new List<Vector3>();
-    public int _currentWaypoint = 0;
+    private int _currentWaypoint = 0;
     private Vector3 _targetVelocity;
+    public ParticleSystem KAPWING;
 
     private void Awake()
     {
@@ -39,6 +40,7 @@ public class Projectile : MonoBehaviour
             if (Vector3.Distance(transform.position, WayPoints[_currentWaypoint]) <= .1f || passed)
             {
                 _currentWaypoint++;
+                ParticleSystem newkapwing = Instantiate<ParticleSystem>(KAPWING, transform.position, Quaternion.identity);
 
                 if (_currentWaypoint > WayPoints.Count - 1)
                 {

@@ -136,7 +136,7 @@ MonoBehaviour:
   ProjectileDirection: {x: 0, y: 0, z: 0}
   PenetrationStrength: 100
   WayPoints: []
-  _currentWaypoint: 0
+  KAPWING: {fileID: 1640729078362962264, guid: a05c83d2ac1c4464fabd292e6107fda0, type: 3}
 --- !u!54 &2554279319438651319
 Rigidbody:
   m_ObjectHideFlags: 0

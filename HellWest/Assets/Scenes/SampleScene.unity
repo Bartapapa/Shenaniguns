@@ -1544,6 +1544,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2260257724669935046, guid: f5729470eedeb8b48af3d2744caab895, type: 3}
+      propertyPath: GunSmoke
+      value: 
+      objectReference: {fileID: 19885060, guid: 2574ca206a571a342a7fab69fdfb87aa, type: 3}
     - target: {fileID: 2354116687294504520, guid: f5729470eedeb8b48af3d2744caab895, type: 3}
       propertyPath: m_Name
       value: //PLAYER
@@ -1660,6 +1664,10 @@ PrefabInstance:
     - target: {fileID: 6506668797871987747, guid: 693ec6e14561a8548aadfc73c93085a5, type: 3}
       propertyPath: m_Name
       value: //UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 8560060163901869416, guid: 693ec6e14561a8548aadfc73c93085a5, type: 3}
+      propertyPath: m_IgnoreReversedGraphics
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -10,6 +10,7 @@ public class PlayerShoot3 : MonoBehaviour
     public VisualizationLine VisualizationLine;
     private VisualizationLine _currentVisualizationLine;
     [HideInInspector] public List<VisualizationLine> ShootingLines = new List<VisualizationLine>();
+    public ParticleSystem GunSmoke;
 
     [Header("Shoot")]
     public Transform RayCastOrigin;
@@ -44,19 +45,19 @@ public class PlayerShoot3 : MonoBehaviour
                 {
                     endPoint = _screenHit.point;
                     ShootPoint.LookAt(endPoint);
-                    DetachedShootPoint.LookAt(endPoint);
+                    DetachedShootPoint.LookAt(ShootingLines[0].DestinationPoint());
                 }
                 else if (Physics.Raycast(ray, out _screenHit, 500f))
                 {
                     endPoint = _screenHit.point;
                     ShootPoint.LookAt(endPoint);
-                    DetachedShootPoint.LookAt(endPoint);
+                    DetachedShootPoint.LookAt(ShootingLines[0].DestinationPoint());
                 }
                 else
                 {
                     endPoint = ray.origin + (ray.direction * 500f);
                     ShootPoint.LookAt(endPoint);
-                    DetachedShootPoint.LookAt(endPoint);
+                    DetachedShootPoint.LookAt(ShootingLines[0].DestinationPoint());
                 }
 
                 Vector3 direction = endPoint - ShootingLines[_currentNumberOfRicochets - 1].DestinationPoint();
@@ -101,6 +102,7 @@ public class PlayerShoot3 : MonoBehaviour
 
         Projectile newBullet = Instantiate<Projectile>(PlayerBullet, DetachedShootPoint.position, DetachedShootPoint.rotation);
         newBullet.InitializeProjectile(DetachedShootPoint.forward, PenetrationStrength);
+        ParticleSystem newGunSmoke = Instantiate<ParticleSystem>(GunSmoke, DetachedShootPoint.position, Quaternion.identity);
     }
 
     public void VisualizeProjectileTrajectory()
@@ -237,6 +239,7 @@ public class PlayerShoot3 : MonoBehaviour
         Projectile newBullet = Instantiate<Projectile>(PlayerBullet, DetachedShootPoint.position, DetachedShootPoint.rotation);
         newBullet.InitializeProjectile(DetachedShootPoint.forward, PenetrationStrength);
         newBullet.WayPoints = wayPoints;
+        ParticleSystem newGunSmoke = Instantiate<ParticleSystem>(GunSmoke, DetachedShootPoint.position, Quaternion.identity);
 
         Player.Instance.TransitionToState(Player.PlayerState.Character);
         ClearVisualizationLines();
