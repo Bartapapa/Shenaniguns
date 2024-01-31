@@ -5,16 +5,28 @@ using UnityEngine;
 public class SC_SignFall : MonoBehaviour
 {
     [SerializeField] private Animator animationTor;
+    [SerializeField] private List<GameObject> enemy = new List<GameObject>();
 
     private bool alreadyFall = false;
     public void FallAnimation()
     {
-        Debug.Log("aaaad");
         if (alreadyFall == false)
         {
-            Debug.Log("Feur fEUR FEUR feur");
             alreadyFall = true;
             animationTor.Play("A_Sign_Fall", 0,0);
+            Invoke("KillDemon", 0.2f);
+        }
+    }
+
+    private void KillDemon()
+    {
+        foreach (GameObject currentEnemy in enemy)
+        {
+            if (currentEnemy != null)
+            {
+                currentEnemy.GetComponent<Demon>().Die();
+            }
+
         }
     }
 }
