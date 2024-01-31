@@ -98,8 +98,8 @@ public class PlayerShoot3 : MonoBehaviour
         _canShoot = false;
         _shootCooldownTimer = ShootCooldown;
 
-        Projectile newBullet = Instantiate<Projectile>(PlayerBullet, ShootPoint.position, ShootPoint.rotation);
-        newBullet.InitializeProjectile(ShootPoint.forward, PenetrationStrength);
+        Projectile newBullet = Instantiate<Projectile>(PlayerBullet, DetachedShootPoint.position, DetachedShootPoint.rotation);
+        newBullet.InitializeProjectile(DetachedShootPoint.forward, PenetrationStrength);
     }
 
     public void VisualizeProjectileTrajectory()
