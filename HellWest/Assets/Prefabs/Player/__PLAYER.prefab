@@ -532,6 +532,8 @@ MonoBehaviour:
   PlayerShoot: {fileID: 2260257724669935046}
   PlayerCameraFocusPoint: {fileID: 3078050928054460417}
   CameraMovementSpeed: 5
+  MaxBullets: 6
+  CurrentBullets: 6
 --- !u!114 &651669494507501617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -761,6 +763,7 @@ MonoBehaviour:
   PlayerBullet: {fileID: 4517930383422880293, guid: 41f924b8c001efa46bfa89a9e9d2792e, type: 3}
   VisualizationLine: {fileID: 2432213363239813987, guid: 245f6850248d7ad4bad4823132285d59, type: 3}
   ShootingLines: []
+  GunSmoke: {fileID: 19885060, guid: 2574ca206a571a342a7fab69fdfb87aa, type: 3}
   RayCastOrigin: {fileID: 6119347071314439037}
   ShootingMask:
     serializedVersion: 2
