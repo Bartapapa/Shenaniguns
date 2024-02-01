@@ -30,7 +30,7 @@ public class Projectile : MonoBehaviour
 
     private void Update()
     {
-        if (WayPoints.Count > 0 && !_isDead)
+        if (WayPoints.Count > 0 && !_isDead && _currentWaypoint < WayPoints.Count)
         {
             Vector3 direction = WayPoints[_currentWaypoint] - transform.position;
             direction = direction.normalized;
@@ -48,10 +48,14 @@ public class Projectile : MonoBehaviour
                 {
                     _isDead = true;
                     Mesh.SetActive(false);
-                    Invoke("DestroyMe", .3f);                
+                    Invoke("DestroyMe", .05f);                
                     //end of line
                 }
             }
+        }
+        else
+        {
+            _targetVelocity = Vector3.zero;
         }
     }
 
