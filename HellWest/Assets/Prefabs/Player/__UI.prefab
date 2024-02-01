@@ -904,6 +904,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4305640526388801396}
+  - component: {fileID: 7005975113314483661}
   m_Layer: 0
   m_Name: __UI
   m_TagString: Untagged
@@ -927,6 +928,25 @@ Transform:
   - {fileID: 7436986697231400418}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7005975113314483661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6506668797871987747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a60d4ebc809695a498112c4fe73e8a3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MinAngle: {fileID: 8550490775144610832}
+  MaxAngle: {fileID: 9140955399821628546}
+  CurrentAngle: {fileID: 2511627549946001904}
+  BulletsLeft: {fileID: 5922024719130070071}
+  RicochetsLeft: {fileID: 2926600555647284333}
+  Player: {fileID: 0}
+  BulletMode: {fileID: 114603643882974365}
 --- !u!1 &7772266963173663213
 GameObject:
   m_ObjectHideFlags: 0

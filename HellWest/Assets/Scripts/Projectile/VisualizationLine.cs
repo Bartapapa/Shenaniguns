@@ -29,16 +29,24 @@ public class VisualizationLine : MonoBehaviour
         //Line.startColor = HandleColor(CanConfirmShot());
         //Line.endColor = HandleColor(CanConfirmShot());
 
-        if (IsLocked) return;
-        Vector3 toDirection = OriginPoint() - DestinationPoint();
-        toDirection = toDirection.normalized;
+        if (IsLocked)
+        {
+            Line.startColor = Color.white;
+            Line.endColor = Color.white;
+        }
+        else
+        {
+            Vector3 toDirection = OriginPoint() - DestinationPoint();
+            toDirection = toDirection.normalized;
 
-        Line.startColor = GetColor(HitData.HitMaterial.Stats.MinMaxDotProductReflection.x,
-                                    HitData.HitMaterial.Stats.MinMaxDotProductReflection.y,
-                                    -Vector3.Dot(toDirection, HitData.HitNormal));
-        Line.endColor = GetColor(HitData.HitMaterial.Stats.MinMaxDotProductReflection.x,
-                                    HitData.HitMaterial.Stats.MinMaxDotProductReflection.y,
-                                    -Vector3.Dot(toDirection, HitData.HitNormal));
+            Line.startColor = GetColor(HitData.HitMaterial.Stats.MinMaxDotProductReflection.x,
+                                        HitData.HitMaterial.Stats.MinMaxDotProductReflection.y,
+                                        -Vector3.Dot(toDirection, HitData.HitNormal));
+            Line.endColor = GetColor(HitData.HitMaterial.Stats.MinMaxDotProductReflection.x,
+                                        HitData.HitMaterial.Stats.MinMaxDotProductReflection.y,
+                                        -Vector3.Dot(toDirection, HitData.HitNormal));
+        }
+
     }
 
     public Vector3 OriginPoint()
@@ -58,8 +66,6 @@ public class VisualizationLine : MonoBehaviour
 
     public Color HandleColor(bool canShoot)
     {
-        if (IsLocked) return Color.yellow;
-
         if (canShoot)
         {
             return Color.white;
@@ -109,12 +115,9 @@ public class VisualizationLine : MonoBehaviour
 
                 Vector3 checkDirection = DestinationPoint() - OriginPoint();
                 checkDirection = checkDirection.normalized;
-                RaycastHit hit;
 
-                if (Physics.Raycast(OriginPoint() + checkDirection, checkDirection, out hit, Vector3.Distance(OriginPoint(), DestinationPoint()) - 1f, ShootingMask))
+                if (Physics.Raycast(OriginPoint() + checkDirection, checkDirection, Vector3.Distance(OriginPoint(), DestinationPoint()) - 1f, ShootingMask))
                 {
-                    //Debug.Log("help");
-                    Debug.Log(hit.collider);
                     return false;
                 }
                 return HitData.CanRicochet(toDirection);
@@ -124,11 +127,11 @@ public class VisualizationLine : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.blue;
-        Vector3 from = OriginPoint();
-        Vector3 toDirection = DestinationPoint() - OriginPoint();
-        toDirection = toDirection.normalized;
-        Vector3 to = OriginPoint() + (toDirection * (Vector3.Distance(OriginPoint(), DestinationPoint()) - 1f));
-        Gizmos.DrawLine(from + toDirection, to);
+        //Gizmos.color = Color.blue;
+        //Vector3 from = OriginPoint();
+        //Vector3 toDirection = DestinationPoint() - OriginPoint();
+        //toDirection = toDirection.normalized;
+        //Vector3 to = OriginPoint() + (toDirection * (Vector3.Distance(OriginPoint(), DestinationPoint()) - 1f));
+        //Gizmos.DrawLine(from + toDirection, to);
     }
 }

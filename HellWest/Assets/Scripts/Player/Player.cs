@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
     public PlayerCamera Camera;
     public PlayerBulletTimer PlayerBT;
     public PlayerShoot3 PlayerShoot;
+    public PlayerUI UI;
 
     [Header("Camera")]
     public Transform PlayerCameraFocusPoint;
@@ -141,11 +142,13 @@ public class Player : MonoBehaviour
                 PlayerCameraFocusPoint.parent = Character.CameraFollowPoint;
 
                 Camera.CurrentState = PlayerCamera.CameraState.FPS;
-                Camera.DefaultDistance = 0f;
-                Camera.MinDistance = 0f;
-                Camera.MaxDistance = 0f;
-                Camera.DistanceMovementSpeed = 5f;
-                Camera.DistanceMovementSharpness = 10f;
+                //Camera.DefaultDistance = 0f;
+                //Camera.MinDistance = 0f;
+                //Camera.MaxDistance = 0f;
+                //Camera.DistanceMovementSpeed = 5f;
+                //Camera.DistanceMovementSharpness = 10f;
+
+                UI.BulletMode.SetActive(false);
                 //Initialize camera distance values
                 break;
             case PlayerState.Dead:
@@ -160,11 +163,13 @@ public class Player : MonoBehaviour
                 PlayerCameraFocusPoint.parent = null;
 
                 Camera.CurrentState = PlayerCamera.CameraState.Detached;
-                Camera.DefaultDistance = 5f;
-                Camera.MinDistance = 0f;
-                Camera.MaxDistance = 10f;
-                Camera.DistanceMovementSpeed = 5f;
-                Camera.DistanceMovementSharpness = 10f;
+                //Camera.DefaultDistance = 5f;
+                //Camera.MinDistance = 0f;
+                //Camera.MaxDistance = 10f;
+                //Camera.DistanceMovementSpeed = 5f;
+                //Camera.DistanceMovementSharpness = 10f;
+
+                UI.BulletMode.SetActive(true);
                 //Initialize camera distance values
                 break;
             default:

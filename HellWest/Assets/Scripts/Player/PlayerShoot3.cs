@@ -8,7 +8,7 @@ public class PlayerShoot3 : MonoBehaviour
     [Header("Object refs")]
     public Projectile PlayerBullet;
     public VisualizationLine VisualizationLine;
-    private VisualizationLine _currentVisualizationLine;
+    public VisualizationLine CurrentVisualizationLine;
     [HideInInspector] public List<VisualizationLine> ShootingLines = new List<VisualizationLine>();
     public ParticleSystem GunSmoke;
 
@@ -17,7 +17,7 @@ public class PlayerShoot3 : MonoBehaviour
     public LayerMask ShootingMask;
     public float PenetrationStrength = 100f;
     public int MaxNumberOfRicochets = 3;
-    private int _currentNumberOfRicochets = 0;
+    public int CurrentNumberOfRicochets = 0;
     public Transform ShootPoint;
     public Transform DetachedShootPoint;
     public float ShootCooldown = .25f;
@@ -37,7 +37,7 @@ public class PlayerShoot3 : MonoBehaviour
 
         if (Player.Instance.CurrentState == Player.PlayerState.ConfirmingFire)
         {
-            if (_currentVisualizationLine != null && !_hasReachedMaxNumberOfRicochets)
+            if (CurrentVisualizationLine != null && !_hasReachedMaxNumberOfRicochets)
             {
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(.5f, .5f, 0f));
                 Vector3 endPoint = Vector3.zero;
@@ -60,14 +60,14 @@ public class PlayerShoot3 : MonoBehaviour
                     DetachedShootPoint.LookAt(ShootingLines[0].DestinationPoint());
                 }
 
-                Vector3 direction = endPoint - ShootingLines[_currentNumberOfRicochets - 1].DestinationPoint();
+                Vector3 direction = endPoint - ShootingLines[CurrentNumberOfRicochets - 1].DestinationPoint();
 
-                if (Physics.Raycast(ShootingLines[_currentNumberOfRicochets-1].DestinationPoint(), direction, out _hit, 500f, ShootingMask))
+                if (Physics.Raycast(ShootingLines[CurrentNumberOfRicochets-1].DestinationPoint(), direction, out _hit, 500f, ShootingMask))
                 {
                     ShootingMaterial shotMat = _hit.collider.GetComponent<ShootingMaterial>();
                     if (shotMat)
                     {
-                        _currentVisualizationLine.SetPosition(1, endPoint);
+                        CurrentVisualizationLine.SetPosition(1, endPoint);
                         _cachedHitData = new ProjectileHitData(shotMat, direction, _hit.normal, _hit.point);
                     }
                 }
@@ -138,12 +138,12 @@ public class PlayerShoot3 : MonoBehaviour
             if (shotMat)
             {
                 Player.Instance.TransitionToState(Player.PlayerState.ConfirmingFire);
-                CreateVisualizationLine(ray.origin, _hit.point, out _currentVisualizationLine);
-                _currentNumberOfRicochets++;
+                CreateVisualizationLine(ray.origin, _hit.point, out CurrentVisualizationLine);
+                CurrentNumberOfRicochets++;
                 _hasReachedMaxNumberOfRicochets = false;
-                _currentVisualizationLine.IsLocked = true;
-                CreateVisualizationLine(_hit.point, endPoint, out _currentVisualizationLine);
-                _currentVisualizationLine.HitData = new ProjectileHitData(shotMat, direction, _hit.normal, _hit.point);
+                CurrentVisualizationLine.IsLocked = true;
+                CreateVisualizationLine(_hit.point, endPoint, out CurrentVisualizationLine);
+                CurrentVisualizationLine.HitData = new ProjectileHitData(shotMat, direction, _hit.normal, _hit.point);
             }
             else
             {
@@ -185,45 +185,45 @@ public class PlayerShoot3 : MonoBehaviour
         if (_hasReachedMaxNumberOfRicochets)
         {
             _hasReachedMaxNumberOfRicochets = false;
-            _currentVisualizationLine.IsLocked = false;
+            CurrentVisualizationLine.IsLocked = false;
         }
         else
         {
-            RemoveVisualizationLine(_currentNumberOfRicochets);
-            _currentNumberOfRicochets--;
+            RemoveVisualizationLine(CurrentNumberOfRicochets);
+            CurrentNumberOfRicochets--;
             _hasReachedMaxNumberOfRicochets = false;
-            if (_currentNumberOfRicochets <= 0)
+            if (CurrentNumberOfRicochets <= 0)
             {
                 Player.Instance.TransitionToState(Player.PlayerState.Character);
                 ClearVisualizationLines();
-                _currentNumberOfRicochets = 0;
+                CurrentNumberOfRicochets = 0;
             }
             else
             {
-                _currentVisualizationLine = ShootingLines[_currentNumberOfRicochets];
-                _currentVisualizationLine.IsLocked = false;
+                CurrentVisualizationLine = ShootingLines[CurrentNumberOfRicochets];
+                CurrentVisualizationLine.IsLocked = false;
             }
         }
     }
 
     public void SetNewTrajectoryPoint()
     {
-        if (!_currentVisualizationLine.CanConfirmShot) return;
+        if (!CurrentVisualizationLine.CanConfirmShot) return;
 
-        if (_currentNumberOfRicochets < MaxNumberOfRicochets)
+        if (CurrentNumberOfRicochets < MaxNumberOfRicochets)
         {
             //_currentVisualizationLine.HitData = _cachedHitData;
-            _currentVisualizationLine.IsLocked = true;
+            CurrentVisualizationLine.IsLocked = true;
 
-            int currentIndex = _currentNumberOfRicochets;
-            CreateVisualizationLine(ShootingLines[currentIndex].DestinationPoint(), _screenHit.point, out _currentVisualizationLine);
-            _currentVisualizationLine.HitData = _cachedHitData;
-            _currentNumberOfRicochets++;
+            int currentIndex = CurrentNumberOfRicochets;
+            CreateVisualizationLine(ShootingLines[currentIndex].DestinationPoint(), _screenHit.point, out CurrentVisualizationLine);
+            CurrentVisualizationLine.HitData = _cachedHitData;
+            CurrentNumberOfRicochets++;
             _hasReachedMaxNumberOfRicochets = false;
         }
         else
         {
-            _currentVisualizationLine.IsLocked = true;
+            CurrentVisualizationLine.IsLocked = true;
             _hasReachedMaxNumberOfRicochets = true;
         }
     }
@@ -243,6 +243,6 @@ public class PlayerShoot3 : MonoBehaviour
 
         Player.Instance.TransitionToState(Player.PlayerState.Character);
         ClearVisualizationLines();
-        _currentNumberOfRicochets = 0;
+        CurrentNumberOfRicochets = 0;
     }
 }
