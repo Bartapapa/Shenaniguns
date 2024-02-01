@@ -208,7 +208,7 @@ public class PlayerShoot3 : MonoBehaviour
 
     public void SetNewTrajectoryPoint()
     {
-        if (!_currentVisualizationLine.CanConfirmShot()) return;
+        if (!_currentVisualizationLine.CanConfirmShot) return;
 
         if (_currentNumberOfRicochets < MaxNumberOfRicochets)
         {

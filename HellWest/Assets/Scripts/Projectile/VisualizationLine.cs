@@ -1,12 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+
+public static class ExtensionMethods
+{
+    public static float Remap (this float value, float inputFrom, float inputTo, float outputFrom, float outputTo)
+    {
+        return (value - inputFrom) / (inputTo - inputFrom) * (outputTo - outputFrom) + outputFrom;
+    }
+}
 
 public class VisualizationLine : MonoBehaviour
 {
     public LineRenderer Line;
     public ProjectileHitData HitData;
     public bool IsLocked = false;
+    private float _currentDP = 0f;
+    public LayerMask ShootingMask;
 
     public VisualizationLine(ProjectileHitData hitData)
     {
@@ -15,8 +26,19 @@ public class VisualizationLine : MonoBehaviour
 
     private void Update()
     {
-        Line.startColor = HandleColor(CanConfirmShot());
-        Line.endColor = HandleColor(CanConfirmShot());
+        //Line.startColor = HandleColor(CanConfirmShot());
+        //Line.endColor = HandleColor(CanConfirmShot());
+
+        if (IsLocked) return;
+        Vector3 toDirection = OriginPoint() - DestinationPoint();
+        toDirection = toDirection.normalized;
+
+        Line.startColor = GetColor(HitData.HitMaterial.Stats.MinMaxDotProductReflection.x,
+                                    HitData.HitMaterial.Stats.MinMaxDotProductReflection.y,
+                                    -Vector3.Dot(toDirection, HitData.HitNormal));
+        Line.endColor = GetColor(HitData.HitMaterial.Stats.MinMaxDotProductReflection.x,
+                                    HitData.HitMaterial.Stats.MinMaxDotProductReflection.y,
+                                    -Vector3.Dot(toDirection, HitData.HitNormal));
     }
 
     public Vector3 OriginPoint()
@@ -48,17 +70,65 @@ public class VisualizationLine : MonoBehaviour
         }
     }
 
-    public bool CanConfirmShot()
+    public Color GetColor(float min, float max, float current)
     {
-        if (HitData.HitMaterial == null)
+        if (IsLocked) return Color.white;
+
+        if (CanConfirmShot)
         {
-            return true;
+            if (current > max || current < min)
+            {
+                return Color.red;
+            }
+            else
+            {
+                //Find 'half' DP, and use that as a basis for the Color.Lerp?
+                float ALPH = current;
+                ALPH = ALPH.Remap(min, max, -1f, 1f);
+                return Color.Lerp(Color.red, Color.yellow, 1 - (Mathf.Abs(ALPH)));
+            }
         }
         else
         {
-            Vector3 toDirection = OriginPoint() - DestinationPoint();
-            toDirection = toDirection.normalized;
-            return HitData.CanRicochet(toDirection);
+            return Color.red;
         }
+    }
+
+    public bool CanConfirmShot
+    {
+        get
+        {
+            if (HitData.HitMaterial == null)
+            {
+                return false;
+            }
+            else
+            {
+                Vector3 toDirection = OriginPoint() - DestinationPoint();
+                toDirection = toDirection.normalized;
+
+                Vector3 checkDirection = DestinationPoint() - OriginPoint();
+                checkDirection = checkDirection.normalized;
+                RaycastHit hit;
+
+                if (Physics.Raycast(OriginPoint() + checkDirection, checkDirection, out hit, Vector3.Distance(OriginPoint(), DestinationPoint()) - 1f, ShootingMask))
+                {
+                    //Debug.Log("help");
+                    Debug.Log(hit.collider);
+                    return false;
+                }
+                return HitData.CanRicochet(toDirection);
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Vector3 from = OriginPoint();
+        Vector3 toDirection = DestinationPoint() - OriginPoint();
+        toDirection = toDirection.normalized;
+        Vector3 to = OriginPoint() + (toDirection * (Vector3.Distance(OriginPoint(), DestinationPoint()) - 1f));
+        Gizmos.DrawLine(from + toDirection, to);
     }
 }

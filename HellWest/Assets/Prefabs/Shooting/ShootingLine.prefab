@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7575664053197540931}
   - component: {fileID: 4001391981297098413}
   - component: {fileID: 2432213363239813987}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ShootingLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -150,3 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Line: {fileID: 4001391981297098413}
+  IsLocked: 0
+  ShootingMask:
+    serializedVersion: 2
+    m_Bits: 1

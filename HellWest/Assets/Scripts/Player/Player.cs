@@ -139,7 +139,6 @@ public class Player : MonoBehaviour
             case PlayerState.Character:
                 PlayerCameraFocusPoint.position = Character.CameraFollowPoint.position;
                 PlayerCameraFocusPoint.parent = Character.CameraFollowPoint;
-                Camera.Transform.rotation = Character.transform.rotation;
 
                 Camera.CurrentState = PlayerCamera.CameraState.FPS;
                 Camera.DefaultDistance = 0f;
