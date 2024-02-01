@@ -10,6 +10,8 @@ public class PlayerUI : MonoBehaviour
     public TextMeshProUGUI CurrentAngle;
     public TextMeshProUGUI BulletsLeft;
     public TextMeshProUGUI RicochetsLeft;
+    public GameObject Reticle;
+    public GameObject NoReticle;
 
     public Player Player;
     public GameObject BulletMode;
@@ -25,6 +27,19 @@ public class PlayerUI : MonoBehaviour
     private void Update()
     {
         if (BulletMode.activeSelf) HandleBulletMode();
+        else
+        {
+            if (!Reticle.active)
+            {
+                Debug.Log("can shoot");
+                Reticle.SetActive(true);
+            }
+            if (NoReticle.active)
+            {
+                Debug.Log("can shoot");
+                NoReticle.SetActive(false);
+            }
+        }
     }
 
     private void HandleBulletMode()
@@ -36,5 +51,32 @@ public class PlayerUI : MonoBehaviour
         Vector3 toDirection = Player.PlayerShoot.CurrentVisualizationLine.OriginPoint() - Player.PlayerShoot.CurrentVisualizationLine.DestinationPoint();
         float dot = -Vector3.Dot(toDirection, Player.PlayerShoot.CurrentVisualizationLine.HitData.HitNormal);
         CurrentAngle.text = Mathf.Acos(dot).ToString();
+
+        if (Player.PlayerShoot.CurrentVisualizationLine.CanConfirmShot)
+        {          
+            if (!Reticle.active)
+            {
+                Debug.Log("can shoot");
+                Reticle.SetActive(true);
+            }
+            if (NoReticle.active)
+            {
+                Debug.Log("can shoot");
+                NoReticle.SetActive(false);
+            }
+        }
+        else
+        {           
+            if (Reticle.active)
+            {
+                Debug.Log("cannot shoot");
+                Reticle.SetActive(false);
+            }
+            if (!NoReticle.active)
+            {
+                Debug.Log("cannot shoot");
+                NoReticle.SetActive(true);
+            }
+        }
     }
 }
