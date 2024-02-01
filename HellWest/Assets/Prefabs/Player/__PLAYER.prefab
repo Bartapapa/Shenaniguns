@@ -530,6 +530,7 @@ MonoBehaviour:
   Camera: {fileID: 6794968054472955379}
   PlayerBT: {fileID: 2901613089697442007}
   PlayerShoot: {fileID: 2260257724669935046}
+  UI: {fileID: 0}
   PlayerCameraFocusPoint: {fileID: 3078050928054460417}
   CameraMovementSpeed: 5
   MaxBullets: 6
@@ -762,6 +763,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerBullet: {fileID: 4517930383422880293, guid: 41f924b8c001efa46bfa89a9e9d2792e, type: 3}
   VisualizationLine: {fileID: 2432213363239813987, guid: 245f6850248d7ad4bad4823132285d59, type: 3}
+  CurrentVisualizationLine: {fileID: 0}
   ShootingLines: []
   GunSmoke: {fileID: 19885060, guid: 2574ca206a571a342a7fab69fdfb87aa, type: 3}
   RayCastOrigin: {fileID: 6119347071314439037}
@@ -770,6 +772,7 @@ MonoBehaviour:
     m_Bits: 1
   PenetrationStrength: 100
   MaxNumberOfRicochets: 3
+  CurrentNumberOfRicochets: 0
   ShootPoint: {fileID: 47504597304941888}
   DetachedShootPoint: {fileID: 306024327081128592}
   ShootCooldown: 0.25
@@ -1191,6 +1194,7 @@ GameObject:
   - component: {fileID: 7515586077601722042}
   - component: {fileID: 7417307859920793346}
   - component: {fileID: 4163060248737789697}
+  - component: {fileID: 8130405229910654188}
   m_Layer: 6
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -1311,6 +1315,33 @@ MonoBehaviour:
   CheckMovementInitialOverlaps: 1
   KillVelocityWhenExceedMaxMovementIterations: 1
   KillRemainingMovementWhenExceedMaxMovementIterations: 1
+--- !u!114 &8130405229910654188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8340586738294857290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31c64a897e54c24448dd0a519db2793f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6401143625019184633}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: PlayerDie
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8364835586924618157
 GameObject:
   m_ObjectHideFlags: 0

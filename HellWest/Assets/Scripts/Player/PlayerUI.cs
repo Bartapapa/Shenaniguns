@@ -12,6 +12,7 @@ public class PlayerUI : MonoBehaviour
     public TextMeshProUGUI RicochetsLeft;
     public GameObject Reticle;
     public GameObject NoReticle;
+    public GameObject YOUDIEDEDED;
 
     public Player Player;
     public GameObject BulletMode;
@@ -22,6 +23,8 @@ public class PlayerUI : MonoBehaviour
         {
             Player = Player.Instance;
         }
+
+        YOUDIEDEDED.SetActive(false);
     }
 
     private void Update()
@@ -78,5 +81,10 @@ public class PlayerUI : MonoBehaviour
                 NoReticle.SetActive(true);
             }
         }
+    }
+
+    public void DIE()
+    {
+        YOUDIEDEDED.SetActive(true);
     }
 }

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -309,5 +310,16 @@ public class Player : MonoBehaviour
         {
             CurrentBullets = MaxBullets;
         }
+    }
+
+    public void PlayerDie()
+    {
+        UI.DIE();
+        Invoke("ReloadScene", 3f);
+    }
+
+    private void ReloadScene()
+    {
+        SceneManager.LoadScene(0);
     }
 }
