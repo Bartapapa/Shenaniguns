@@ -139,6 +139,7 @@ public class Player : MonoBehaviour
             case PlayerState.Character:
                 PlayerCameraFocusPoint.position = Character.CameraFollowPoint.position;
                 PlayerCameraFocusPoint.parent = Character.CameraFollowPoint;
+                Camera.Transform.rotation = Character.transform.rotation;
 
                 Camera.CurrentState = PlayerCamera.CameraState.FPS;
                 Camera.DefaultDistance = 0f;
@@ -184,7 +185,7 @@ public class Player : MonoBehaviour
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        if (context.started && CurrentState == PlayerState.Character)
+        if (context.started && CurrentState == PlayerState.Character && CurrentBullets > 0)
         {
             PlayerShoot.VisualizeProjectileTrajectory();
         }
@@ -219,7 +220,7 @@ public class Player : MonoBehaviour
     }
     public void OnConfirmFire(InputAction.CallbackContext context)
     {
-        if (context.started && CurrentState == PlayerState.ConfirmingFire)
+        if (context.started && CurrentState == PlayerState.ConfirmingFire && CurrentBullets > 0)
         {
             List<Vector3> wayPoints = new List<Vector3>();
             for (int i = 0; i < PlayerShoot.ShootingLines.Count; i++)

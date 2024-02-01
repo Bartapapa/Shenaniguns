@@ -130,15 +130,15 @@ public class PlayerShoot3 : MonoBehaviour
             DetachedShootPoint.LookAt(endPoint);
         }
 
-        Vector3 direction = endPoint - RayCastOrigin.position;
+        Vector3 direction = endPoint - ray.origin;
 
-        if (Physics.Raycast(RayCastOrigin.position, direction, out _hit, 500f, ShootingMask))
+        if (Physics.Raycast(ray.origin, direction, out _hit, 500f, ShootingMask))
         {
             ShootingMaterial shotMat = _hit.collider.GetComponent<ShootingMaterial>();
             if (shotMat)
             {
                 Player.Instance.TransitionToState(Player.PlayerState.ConfirmingFire);
-                CreateVisualizationLine(DetachedShootPoint.position, _hit.point, out _currentVisualizationLine);
+                CreateVisualizationLine(ray.origin, _hit.point, out _currentVisualizationLine);
                 _currentNumberOfRicochets++;
                 _hasReachedMaxNumberOfRicochets = false;
                 _currentVisualizationLine.IsLocked = true;
