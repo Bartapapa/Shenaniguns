@@ -116,7 +116,17 @@ public class VisualizationLine : MonoBehaviour
                 Vector3 checkDirection = DestinationPoint() - OriginPoint();
                 checkDirection = checkDirection.normalized;
 
-                if (Physics.Raycast(OriginPoint() + checkDirection, checkDirection, Vector3.Distance(OriginPoint(), DestinationPoint()) - 1f, ShootingMask))
+                RaycastHit[] hits = Physics.RaycastAll(OriginPoint() + (checkDirection * .2f), checkDirection, Vector3.Distance(OriginPoint(), DestinationPoint()) - .2f);
+                foreach(RaycastHit hit in hits)
+                {
+                    Demon demon = hit.collider.GetComponent<Demon>();
+                    if (demon)
+                    {
+                        demon.ShowOutline();
+                    }
+                }
+
+                if (Physics.Raycast(OriginPoint() + (checkDirection*.2f), checkDirection, Vector3.Distance(OriginPoint(), DestinationPoint()) - .2f, ShootingMask))
                 {
                     return false;
                 }
