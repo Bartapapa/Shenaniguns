@@ -8134,7 +8134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0e65190280035b4c8703f0edb4bfe26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Blood: {fileID: 19808544, guid: 78e1c8c5b281b8b439229473779ac9aa, type: 3}
+  Blood: {fileID: 19808544, guid: 8292b8b8687036442a586b6fc63325eb, type: 3}
   Outline: {fileID: 6260165092303566113}
 --- !u!1 &6260165092303566113
 GameObject:

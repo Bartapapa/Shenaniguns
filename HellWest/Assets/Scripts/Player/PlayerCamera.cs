@@ -97,7 +97,7 @@ public class PlayerCamera : MonoBehaviour
         PlanarDirection = Vector3.forward;
     }
 
-    private void Start()
+    public void StartCamera()
     {
         TransitionToState(_currentState);
     }

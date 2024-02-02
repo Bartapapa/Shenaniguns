@@ -76,6 +76,7 @@ GameObject:
   - component: {fileID: 6071633534435721285}
   - component: {fileID: 3465995284836321441}
   - component: {fileID: 6047633788940437235}
+  - component: {fileID: 6313615174765200342}
   m_Layer: 7
   m_Name: Bottle
   m_TagString: Untagged
@@ -143,6 +144,9 @@ MonoBehaviour:
   ProjectileNumber: 10
   DestructibleCenterOfMass: {fileID: 4371562709657497116}
   ProjectileSphereRadius: 0.15
+  ExplodingCollider: {fileID: 6313615174765200342}
+  BottleExplode: {fileID: 19808544, guid: 78e1c8c5b281b8b439229473779ac9aa, type: 3}
+  Mesh: {fileID: 8650020024309231201}
 --- !u!65 &3465995284836321441
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -191,6 +195,27 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 126
   m_CollisionDetection: 1
+--- !u!135 &6313615174765200342
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8271708441742063758}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0.15, z: 0}
 --- !u!1 &8650020024309231201
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,6 +8,9 @@ public class Destructible : MonoBehaviour
     public int ProjectileNumber;
     public Transform DestructibleCenterOfMass;
     public float ProjectileSphereRadius = 5f;
+    public Collider ExplodingCollider;
+    public ParticleSystem BottleExplode;
+    public GameObject Mesh;
     public void Explode()
     {
         for (int i = 0; i < ProjectileNumber; i++)
@@ -16,11 +19,12 @@ public class Destructible : MonoBehaviour
             Projectile newProjectile = Instantiate<Projectile>(Projectile, DestructibleCenterOfMass.position+randomPoint, Quaternion.identity);
             Vector3 direction = newProjectile.transform.position - DestructibleCenterOfMass.position;
             direction = direction.normalized;
-            newProjectile.InitializeProjectile(direction, 100f);
-            
+            newProjectile.InitializeProjectile(direction, 100f);           
         }
-
-        Destroy(this.gameObject);
+        ExplodingCollider.enabled = true;
+        Mesh.SetActive(false);
+        ParticleSystem explode = Instantiate<ParticleSystem>(BottleExplode, DestructibleCenterOfMass.position, Quaternion.identity);
+        Invoke("DestroyMe", .1f);
     }
 
     private void OnDrawGizmosSelected()
@@ -28,5 +32,19 @@ public class Destructible : MonoBehaviour
         if (!DestructibleCenterOfMass) return;
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(DestructibleCenterOfMass.position, ProjectileSphereRadius);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Demon demon = other.GetComponent<Demon>();
+        if (demon)
+        {
+            demon.Die();
+        }
+    }
+
+    private void DestroyMe()
+    {
+        Destroy(this.gameObject);
     }
 }

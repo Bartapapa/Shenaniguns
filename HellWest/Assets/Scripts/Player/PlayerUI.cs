@@ -34,12 +34,10 @@ public class PlayerUI : MonoBehaviour
         {
             if (!Reticle.active)
             {
-                Debug.Log("can shoot");
                 Reticle.SetActive(true);
             }
             if (NoReticle.active)
             {
-                Debug.Log("can shoot");
                 NoReticle.SetActive(false);
             }
         }

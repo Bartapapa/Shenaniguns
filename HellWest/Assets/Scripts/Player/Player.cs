@@ -77,6 +77,8 @@ public class Player : MonoBehaviour
         Camera.IgnoredColliders.AddRange(Character.GetComponentsInChildren<Collider>());
 
         CurrentState = PlayerState.Character;
+
+        Camera.StartCamera();
     }
 
     private void Update()
@@ -141,7 +143,6 @@ public class Player : MonoBehaviour
             case PlayerState.Character:
                 PlayerCameraFocusPoint.position = Character.CameraFollowPoint.position;
                 PlayerCameraFocusPoint.parent = Character.CameraFollowPoint;
-
                 Camera.CurrentState = PlayerCamera.CameraState.FPS;
                 //Camera.DefaultDistance = 0f;
                 //Camera.MinDistance = 0f;

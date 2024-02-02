@@ -19,6 +19,8 @@ public class VisualizationLine : MonoBehaviour
     private float _currentDP = 0f;
     public LayerMask ShootingMask;
 
+    private Color Orange = new Color(1f, 0.64f, 0f, 1f);
+
     public VisualizationLine(ProjectileHitData hitData)
     {
         HitData = hitData;
@@ -91,7 +93,7 @@ public class VisualizationLine : MonoBehaviour
                 //Find 'half' DP, and use that as a basis for the Color.Lerp?
                 float ALPH = current;
                 ALPH = ALPH.Remap(min, max, -1f, 1f);
-                return Color.Lerp(Color.red, Color.yellow, 1 - (Mathf.Abs(ALPH)));
+                return Color.Lerp(new Color(1f, 0.50f, 0f, 1f), new Color(1f, 0.95f, 0.3f, 1f), 1 - (Mathf.Abs(ALPH)));
             }
         }
         else
